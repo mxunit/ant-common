@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="git-common">
+    
+    <macrodef name="gitPushBuildChanges">
+        <attribute name="remoteName"/>
+        <attribute name="branchName"/>
+    	<attribute name="message"/>
+        <sequential>
+            <git command="add" dir=".">
+                <args>
+                    <arg value="."/>
+                </args>
+            </git>
+            <git command="commit" dir=".">
+                <args>
+                    <arg value="-m"/>
+                    <arg value="'@{message]'"/>
+                </args>
+            </git>
+            <git command="push" dir=".">
+                <args>
+                    <arg value="@{remoteName}"/>
+                    <arg value="@{branchName}"/>
+                </args>
+            </git>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="gitTag">
+        <attribute name="remoteName"/>
+        <attribute name="tagName"/>
+        <sequential>
+            <git command="tag" dir=".">
+                <args>
+                    <arg value="-f"/>
+                    <arg value="'@{tagName}'"/>
+                </args>
+            </git>
+            <git command="push" dir=".">
+                <args>
+                    <arg value="-f"/>
+                    <arg value="@{remoteName}"/>
+                    <arg value="'@{tagName}'"/>
+                </args>
+            </git>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="git">
+        <attribute name="command"/>
+        <attribute name="dir" default=""/>
+        <element name="args" optional="true"/>
+        <sequential>
+            <echo message="git @{command}"/>
+            <exec executable="git" dir="@{dir}">
+                <arg value="@{command}"/>
+                <args/>
+            </exec>
+        </sequential>
+    </macrodef>
+    
+</project>
